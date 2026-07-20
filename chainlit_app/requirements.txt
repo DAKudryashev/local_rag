@@ -1,0 +1,7 @@
+chainlit
+langchain
+langchain-huggingface
+sentence-transformers
+qdrant-client
+requests
+python-dotenv
