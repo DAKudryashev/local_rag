@@ -13,13 +13,14 @@
 ## Архитектура
 
 ```mermaid
-graph TD;
-    A[Пользователь] -->|вопрос| B[Chainlit (веб-интерфейс)];
-    B --> C[Qdrant (поиск векторов)];
-    C --> D[GigaChat API (генерация ответа)];
-    D -->|ответ| B;
-    
-    E[Airflow (DAG)] --> F[Чтение файлов из data/];
-    F --> G[Разбивка на чанки];
-    G --> H[Эмбеддинги через rubert-tiny2];
-    H --> I[Загрузка в Qdrant];
+graph TD
+    User[Пользователь] -->|вопрос| Chat[Chainlit UI]
+    Chat -->|поиск векторов| Qdrant[(Qdrant)]
+    Qdrant -->|релевантные чанки| Chat
+    Chat -->|запрос с контекстом| GigaChat[GigaChat API]
+    GigaChat -->|ответ| Chat
+
+    Airflow[Airflow DAG] --> Read[Чтение файлов]
+    Read --> Split[Разбивка на чанки]
+    Split --> Embed[Эмбеддинги через rubert-tiny2]
+    Embed --> Load[Загрузка в Qdrant]
